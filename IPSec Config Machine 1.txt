@@ -1,0 +1,32 @@
+Steps to Configure IPsec using StrongSwan
+
+
+Step 1: Install StrongSwan
+Install the strongSwan package on both machines:
+--------------------------------------------------
+sudo apt update
+sudo apt install strongswan strongswan-pki
+-------------------------------------------------
+Configure IPsec
+
+
+Edit /etc/ipsec.conf
+Machine A (192.168.56.106)
+
+config setup
+    charondebug="ike 2, knl 2, cfg 2"
+
+conn %default
+    ikelifetime=60m
+    keylife=20m
+    rekeymargin=3m
+    keyingtries=1
+    authby=secret
+    keyexchange=ikev2
+
+conn myvpn
+    left=192.168.1.1
+    leftsubnet=192.168.1.0/24
+    right=192.168.2.1
+    rightsubnet=192.168.2.0/24
+    auto=start
